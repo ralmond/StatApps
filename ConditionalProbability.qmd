@@ -3,7 +3,6 @@ title: "ConditionalProbability"
 author: "Russell Almond"
 date: "10/4/2021"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}

@@ -3,7 +3,6 @@ title: "Binomial Parameters"
 author: "Russell Almond"
 date: "September 1, 2020"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -25,22 +24,31 @@ Sometimes we write this in terms of the proportion of black balls in
 the sample.  That is $p$, with a standard deviation of $\sqrt{p(1-p)/n}$.
 
 
-```{r density, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui <- fluidPage(
 inputPanel(
   sliderInput("n", label = "Number of draws:",
               min=0, max=100, value=10, step=1),
   
   sliderInput("p", label = "Probability of success:",
               min = 0, max = 1, value = .6, step = 0.01)
-)
+),
+mainPanel(
+  plotOutput("bincurve")))
 
-renderPlot({
+server <- function (input,output) {
+  output$bincurve <- renderPlot({
   n <- as.numeric(input$n)
   p <- as.numeric(input$p)
   dat <- data.frame(x=0:n,y=dbinom(0:n,n,p))
   ggplot(dat,aes(x,y)) +geom_col()  
 
 })
+}
+shinyApp(ui=ui,server=server)
 ```
 
 Note that this distribution is positively skewed if $p < 0.5$ and
