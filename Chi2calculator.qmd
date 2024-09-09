@@ -3,7 +3,6 @@ title: "Chi-squared Calculator"
 author: "Russell Almond"
 date: "2019-11-05"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -14,8 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this tool, you input a $\chi^2$ score and the degrees of freedom, and get a corresponding $p$-value.
 
-```{r probabilities, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
 library(shiny)
+ui <- fluidPage(
 inputPanel(
   selectInput("tails", label = "Which tails",
               choices = c("Upper tail: Pr(x^2 < X^2)"="upper",
@@ -24,9 +26,12 @@ inputPanel(
   
   numericInput("x2", label = "chi-squared value:", value=2),
   numericInput("df", label = "Degrees of Freedom", value =1)
-)
+),
+mainPanel(
+  plotOutput("probplot")))
 
-renderPlot({
+server <- function (input,output) {
+  output$probplot <- renderPlot({
   q <- input$x2
   df <- input$df
   p <- switch(input$tails,
@@ -51,13 +56,19 @@ renderPlot({
            axis(1,q,paste(round(q,3)),cex.axis=2)
          })
 })
+}
+shinyApp(ui=ui,server=server)
 ```
 
 ## Chi-square Quantiles (Critical values).
 
 In this tool, you input a probability and degrees of freedom, and get a corresponding $X^2$ score.
 
-```{r quantiles, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui1 <- fluidPage(
 inputPanel(
    selectInput("tails1", label = "Which tails",
               choices = c("Upper tail: Pr(x^2 < X^2)"="upper",
@@ -65,9 +76,12 @@ inputPanel(
               selected = "upper"),
   numericInput("pp", label = "Probability of shaded region:", value=0.05, min=0, max=1),
   numericInput("df1", label = "Degrees of Freedom", value =1)
-)
+),
+mainPanel(
+  plotOutput("quantplot")))
 
-renderPlot({
+server1 <- function (input,output) {
+  output$quantplot <- renderPlot({
   pp <- as.numeric(input$pp)
   df1 <- as.numeric(input$df1)
   qq <- switch(input$tails1,
@@ -93,6 +107,8 @@ renderPlot({
          })
 
 })
+}
+shinyApp(ui=ui1,server=server1)
 ```
 
 For $\chi^2$ tests, one almost always looks at upper tail, and rarely look at the lower tail (does the data fit better than expected). Two-tailed tests are never ("What never?", "No Never!", "What Never?", "Well hardly ever!", Gilbert & Sulivan, *HMS Pinfore*) done.

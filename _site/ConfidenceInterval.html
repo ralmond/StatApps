@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -41,6 +41,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,13 +73,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/selectize-0.15.2/css/selectize.bootstrap3.css" rel="stylesheet">
-<script src="site_libs/selectize-0.15.2/js/selectize.min.js"></script>
-<script src="site_libs/selectize-0.15.2/accessibility/js/selectize-plugin-a11y.min.js"></script>
-<script src="site_libs/ionrangeslider-javascript-2.3.1/js/ion.rangeSlider.min.js"></script>
-<script src="site_libs/strftime-0.9.2/strftime-min.js"></script>
-<link href="site_libs/ionrangeslider-css-2.3.1/css/ion.rangeSlider.css" rel="stylesheet">
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -153,7 +151,6 @@ window.Quarto = {
   <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link active" data-scroll-target="#confidence-intervals">Confidence Intervals</a></li>
   <li><a href="#catching-fish-in-our-net" id="toc-catching-fish-in-our-net" class="nav-link" data-scroll-target="#catching-fish-in-our-net">Catching Fish in Our Net</a></li>
   <li><a href="#random-points" id="toc-random-points" class="nav-link" data-scroll-target="#random-points">Random Points</a></li>
-  <li><a href="#random-intervals" id="toc-random-intervals" class="nav-link" data-scroll-target="#random-intervals">Random Intervals</a></li>
   <li><a href="#interpreting-confidence-intervals" id="toc-interpreting-confidence-intervals" class="nav-link" data-scroll-target="#interpreting-confidence-intervals">Interpreting Confidence Intervals</a>
   <ul class="collapse">
   <li><a href="#classical-approach" id="toc-classical-approach" class="nav-link" data-scroll-target="#classical-approach">Classical Approach</a></li>
@@ -212,88 +209,132 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="random-points">Random Points</h2>
 <p>Select the number of repetitions (how many times we through the net), the sample size (the size of the net) as well as the parameters of the population.</p>
 <p>You may need to press the regenerate button to get the graph to have the right symbols.</p>
-<div class="cell">
-<div class="cell-output-display no-overflow-x">
-<div class="shiny-input-panel">
-<div class="shiny-flow-layout">
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="M-label" for="M">Number of Repetitions:</label>
-<div>
-<select id="M" class="shiny-input-select"><option value="50">50</option>
-<option value="100" selected="">100</option>
-<option value="200">200</option></select>
-<script type="application/json" data-for="M" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
-</div>
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="N-label" for="N">Sample Size:</label>
-<div>
-<select id="N" class="shiny-input-select"><option value="1" selected="">1</option>
-<option value="5">5</option>
-<option value="10">10</option>
-<option value="25">25</option>
-<option value="50">50</option>
-<option value="100">100</option></select>
-<script type="application/json" data-for="N" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
-</div>
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="my-label" for="my">Mean of Y:</label>
-<input class="js-range-slider" id="my" data-skin="shiny" data-min="0" data-max="100" data-from="50" data-step="1" data-grid="true" data-grid-num="10" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number">
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="sy-label" for="sy">Standard Deviation of Y:</label>
-<input class="js-range-slider" id="sy" data-skin="shiny" data-min="0.2" data-max="25" data-from="10" data-step="0.1" data-grid="true" data-grid-num="9.92" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number">
-</div>
-</div>
-<div>
-<button id="go" type="button" class="btn btn-default action-button">(Re)Generate</button>
-</div>
-</div>
-</div>
-</div>
-<div class="cell-output-display">
-<div class="shiny-plot-output html-fill-item" id="outbf9db7d56c671fc2" style="width:100%;height:400px;"></div>
-</div>
-<div class="cell-output-display">
-<div id="out9acef2a1b0d035e5" class="shiny-text-output"></div>
-</div>
-</div>
-<ul>
-<li><p>Approximaly 2/3 of the data points should be within 1 SE of the mean (plotted as circles)</p></li>
-<li><p>Approximately 95 percent of the data points should be within 1 SE of the mean (circles and triangles).</p></li>
-<li><p>Approximately 5 percent of the data points should be 2 SEs or more away from the mean (plotted at diamonds).</p></li>
-</ul>
-<p>Note that changing the mean and sd of the population only changes the scales on the graph, not the structure of the problem.</p>
-</section>
-<section id="random-intervals" class="level2">
-<h2 class="anchored" data-anchor-id="random-intervals">Random Intervals</h2>
-<p>Taking the sample mean and going plus or minus two standard errors produces a confidence interval.</p>
-<p>Actually, the two standard error rule is based on looking up the .975 (1-.05/2) point on the <a href="NormalCalculator.Rmd">normal table</a>. We could put other values in there as well (50%, 75%, 90% and 99% are common choices). This will adjust the length of the slider.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="shiny-input-panel">
-<div class="shiny-flow-layout">
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="alpha-label" for="alpha">Confidence</label>
-<input class="js-range-slider" id="alpha" data-skin="shiny" data-min="0" data-max="1" data-from="0.95" data-step="0.01" data-grid="true" data-grid-num="10" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell-output-display">
-<div class="shiny-plot-output html-fill-item" id="out8b5d86ea2f1f17a4" style="width:100%;height:400px;"></div>
-</div>
-</div>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 1500
+library(shiny)
+
+rpointnotes &lt;- ""
+rintnotes &lt;-""
+
+
+Z &lt;- rnorm(100)
+p1 &lt;- floor(abs(Z)) +1
+ui &lt;- fluidPage(
+inputPanel(
+    selectInput("M", label = "Number of Repetitions:",
+                choices = c(50, 100, 200), selected = 100),
+    selectInput("N", label = "Sample Size:",
+                choices = c(1,5,10,25,50,100), selected = 1),
+    sliderInput("my", label = "Mean of Y:",
+              min=0, max=100, value=50, step=1),
+    sliderInput("sy", label = "Standard Deviation of Y:",
+              min = 0.2, max = 25, value = 10, step = 0.1),
+    actionButton("go",label="(Re)Generate")),
+mainPanel(
+  plotOutput("plot"),
+  fluidRow(textOutput("sem")),
+  fluidRow(textOutput("text1")),
+  fluidRow(textOutput("text2")),
+  fluidRow(textOutput("text3")),
+  tags$ul(
+    tags$li("Approximaly 2/3 of the data points should be within 1 SE of the mean (plotted as circles)"),
+    tags$li("* Approximately 95 percent of the data points should be within 1 SE of the mean (circles and triangles)."),
+    tags$li("Approximately 5 percent of the data points should be 2 SEs or more away from the mean (plotted at diamonds).")),
+  p("Note that changing the mean and sd of the population only changes the scales on the graph, not the structure of the problem."),
+  h2("Random Intervals"),
+  p("Taking the sample mean and going plus or minus two standard errors produces a confidence interval."),
+  markdown("Actually, the two standard error rule is based on looking up the .975 (1-.05/2) point on the [normal table](NormalCalculator.Rmd).  We could put other values in there as well (50%, 75%, 90% and 99% are common choices).  This will adjust the length of the slider."),
+  sliderInput("alpha","Confidence",
+                       min=0,max=1,value=.95,step=.01),
+  plotOutput("plotI"))
+               
+
+server &lt;- function (input,output) {
+
+  dataSet &lt;- reactiveValues(Z=Z,sem=10,
+                             pch=ifelse(p1 &gt;2, 5, p1), 
+                         M=100,
+                 my=50,sy=10)
+  
+  observeEvent(input$go,{
+      M &lt;- as.numeric(input$M)
+      dataSet$Z &lt;- rnorm(M)
+      sy &lt;- as.numeric(input$sy)
+      dataSet$sem &lt;- sy / sqrt(as.numeric(input$N))
+      p1 &lt;-floor(abs(dataSet$Z)) + 1
+      dataSet$pch &lt;- ifelse(p1 &gt; 2, 5, p1)
+      my &lt;- as.numeric(input$my)
+  })
+
+  output$plot &lt;- renderPlot({
+      sem &lt;- dataSet$sem
+      my &lt;- dataSet$my
+      sy &lt;- dataSet$sy
+      X &lt;- dataSet$Z * sem + my
+      M &lt;- length(X)
+      curve(
+        dnorm(x, my, sem),
+        xlim = c(my - 3.5 * sy, 
+                 my + 3.5 * sy),
+        ylab = "density",
+        xlab = "Sample Mean"
+      )
+      abline(v = my)
+      abline(h = 0)
+      text(my + .25 * sem, .02, expression(mu[Y]))
+      abline(v = my - 2 * sem)
+      text(my - 2 * sem + .25 * sem, 0.0025, "-2SE")
+      abline(v = my - sem)
+      text(my - sem + .25 * sem, 0.005,"-1SE")
+      abline(v = my + sem)
+      text(my + sem + .25 * sem, 0.005, "+1SE")
+      abline(v = my + 2 * sem)
+      text(my + 2 * sem + .25 * sy, 0.0025, "2SE")
+      points(X, rep(0, M), pch = dataSet$pch)
+    })
+   output$sem &lt;- renderText({
+     sem &lt;- dataSet$sem
+      paste(
+        "Standard Error = ",
+        round(sem, 3),".")})
+   output$text1 &lt;- renderText({
+     pch &lt;- dataSet$pch
+     paste(sum(pch == 1),
+        "Estimates less than 1 SE from mean;")
+    })
+   output$text2 &lt;- renderText({
+     pch &lt;- dataSet$pch
+     paste(sum(pch == 2),
+        "Estimates between 1 and 2 SE from mean;")
+    })
+   output$text3 &lt;- renderText({
+     pch &lt;- dataSet$pch
+     paste(sum(pch == 5),
+        "Estimates more than 2 SE from mean.")
+   })
+   output$plot1 &lt;- renderPlot({
+      sem &lt;- dataSet$sem
+      my &lt;- dataSet$my
+      X &lt;- dataSet$Z * sem + my
+      M &lt;- length(X)
+      i &lt;- 1:M
+      alpha &lt;- (1-as.numeric(input$alpha))/2
+      X.low &lt;- X +qnorm(alpha)*sem
+      X.high &lt;- X + qnorm(1-alpha)*sem
+      pch1 &lt;- ifelse(X.low &lt;= my &amp; my &lt;= X.high,1,5)
+      plot(c(my-3.5*sem,my+3.5*sem),c(0,M+1),
+             ylab="Trial",xlab="Sample Mean",
+           main=paste(100*(1-2*alpha),"% Confidence Intervals"), type="n")
+      points(X,i,pch=pch1)
+      segments(X.low,i,X.high,i,lty=pch1,
+               col=ifelse(pch1==5,1,5))
+      abline(v = my)
+    })
+
+
+
+}
+shinyApp(ui=ui,server=server)</code></pre>
 <p>The number of confidence intervals that don’t overlap the target line should be around <span class="math inline">\(\alpha\)</span> (the number in the slider) of the total number of intervals.</p>
 <ul>
 <li>This graph and the random points above are based on the same data. For the 95% interval; the data points where the intervals don’t cross correspond to the data points outside of the 95% region.</li>
