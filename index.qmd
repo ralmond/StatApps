@@ -1,11 +1,31 @@
 ---
-title: "IntroStatApps"
+title: "Index of R Demonstrations for Intro Stat"
+author: "Russell Almond"
+date: "September 4, 2020"
+output: html_document
 ---
 
-This is a Quarto website.
+![Florida State University](img/Formal-wcollege-H_1.svg){height="120px"}
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(htmltools)
 ```
+
+These are demonstrations which were written for EDF 5400, which is an introductory statistics class taught at the graduate level.
+
+## Index of R Demonstrations
+
+```{r index,echo=FALSE}
+alist <-  function(file) {tags$li(a(basename(file),href=file))}
+tag("ul",lapply(list.files(pattern="*.qmd$"),alist))
+```
+
+![CC-BY](img/by.png){width="141px"}
+
+These are licensed under the creative commons [CC BY 4.0 
+license](https://creativecommons.org/licenses/by/4.0/). You many distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator.
+
+For more information contact [Russell Almond](mailto:ralmond@fsu.edu).
+
+The Source files for these demonstrations can be found at <https://github.com/ralmond/IntroStats>
