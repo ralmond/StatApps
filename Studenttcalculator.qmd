@@ -109,7 +109,7 @@ mainPanel(
   plotOutput("tcurve1")))
 
 server1 <- function (input,output) {
-  output$normcurve <- 
+  output$tcurve1 <- 
 renderPlot({ 
   pp <- input$p
   df1 <- input$df1 

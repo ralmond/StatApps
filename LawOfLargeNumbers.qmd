@@ -3,27 +3,40 @@ title: "Law of Large Numbers"
 author: "Russell Almond"
 date: "February 19, 2019"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Law of Large Numbers
 
-This is pretty close to the frequency definition of probability. Suppose the probability of some event is $p$. Suppose further than we sample $N$ times from the process that generates this event. Let $p_N$ be the proportion of times the event occurs in $N$ trials. As $N$ gets bigger and bigger, $p_N$ gets closer and closer to $p$.
+This is pretty close to the frequency definition of
+probability. Suppose the probability of some event is $p$. Suppose
+further than we sample $N$ times from the process that generates this
+event. Let $p_N$ be the proportion of times the event occurs in $N$
+trials. As $N$ gets bigger and bigger, $p_N$ gets closer and closer to
+$p$.
 
-![Detour](sign_turn_left.png)*(Skip this unless you are good with calculus.)* This is one of those epsilon-delta theorems. So let $\delta$ be a difference from $p$ and let $\epsilon$ be a small probability. For any $\epsilon$ and $\delta$, there exists an $N$ such that $P(|p_N-p|>\delta) < \epsilon$.
+![Detour](sign_turn_left.png)*(Skip this unless you are good with
+calculus.)* This is one of those epsilon-delta theorems. So let
+$\delta$ be a difference from $p$ and let $\epsilon$ be a small
+probability. For any $\epsilon$ and $\delta$, there exists an $N$ such
+that $P(|p_N-p|>\delta) < \epsilon$.
 
 ## A demonstration.
 
-In the picture below, pick a probability $p$ and a sample size $N$. The computer will generate samples up to $N$ and plot $p_N$.
+In the picture below, pick a probability $p$ and a sample size
+$N$. The computer will generate samples up to $N$ and plot $p_N$.
 
-The $\delta$-line is an error bound plus or minus $\delta$ units from the target $p$. This is a target so you can judge how close you got.
+The $\delta$-line is an error bound plus or minus $\delta$ units from
+the target $p$. This is a target so you can judge how close you got.
 
-```{r LoLN, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
 library(shiny)
+ui <- fluidPage(
 inputPanel(
   selectInput("N", label = "Maximum Sample Size:",
               choices = c(50, 100, 200, 500, 1000), selected = 200),
@@ -33,9 +46,12 @@ inputPanel(
   sliderInput("delta", label = "Distance of reference line from target (delta)",
               min = 0, max = .1, value = .05, step = 0.005)
 
-)
+),
+mainPanel(
+  plotOutput("converge")))
 
-renderPlot({
+server <- function (input,output) {
+  output$converge <- renderPlot({
   x <- runif(input$N) < input$p
   pn <- cumsum(x)/1:input$N
   plot(1:input$N,pn,xlab="Number of Trials",ylab="Proportion Success",
@@ -44,25 +60,47 @@ renderPlot({
   abline(h=input$p+input$delta,col="skyblue")
   abline(h=input$p-input$delta,col="skyblue")
 })
+}
+shinyApp(ui=ui,server=server)
 ```
 
 ## Convergence of Distributions (Boot strap distribution)
 
-We can use the *Law of Large Numbers* to prove an important theorem. As the sample size gets larger and larger, the sample looks more and more like the population it is drawn from.
+We can use the *Law of Large Numbers* to prove an important
+theorem. As the sample size gets larger and larger, the sample looks
+more and more like the population it is drawn from.
 
-![Proof](sign_turn_left.png) Technically, the *Law of Large Numbers* refers to the result above. But we can use it so show a very important basis of statistics. Suppose we have some kind of distribution, $F(x)$, that generates numbers, $X$. Recall that the definition of $F(x)=\Pr(X \leq x)$.
+![Proof](sign_turn_left.png) Technically, the *Law of Large Numbers*
+refers to the result above. But we can use it so show a very important
+basis of statistics. Suppose we have some kind of distribution,
+$F(x)$, that generates numbers, $X$. Recall that the definition of
+$F(x)=\Pr(X \leq x)$.
 
-![Proof](sign_turn_left.png) Draw a sample of size $N$ from this distribution. Now consider the sampled data points $X_1,\ldots,X_N$, and consider sampling a new value $Y$ from that distribution. Let $F_N(y) = \Pr(Y \leq y)$. This is sometimes called the *bootstrap distribution*.
+![Proof](sign_turn_left.png) Draw a sample of size $N$ from this
+distribution. Now consider the sampled data points $X_1,\ldots,X_N$,
+and consider sampling a new value $Y$ from that distribution. Let
+$F_N(y) = \Pr(Y \leq y)$. This is sometimes called the *bootstrap
+distribution*.
 
-![Proof](sign_turn_left.png) By the law of large numbers, for every $y$, as $N$ gets large $F_N(y) \rightarrow F(y)$. So the sample distribution $F_N()$ converges to the $F()$.
+![Proof](sign_turn_left.png) By the law of large numbers, for every
+$y$, as $N$ gets large $F_N(y) \rightarrow F(y)$. So the sample
+distribution $F_N()$ converges to the $F()$.
 
 ## Demonstration of convergence of distributions.
 
-Pick a distribution: \* Normal -- standard normal \* Exponential -- highly skewed \* Gamma (shape = 3) -- skewed \* T (df =3) -- high kurtosis
+Pick a distribution: \* Normal -- standard normal \* Exponential --
+highly skewed \* Gamma (shape = 3) -- skewed \* T (df =3) -- high
+kurtosis
 
-Slide the sample size up and down, notice how the empirical distribution function and histogram coverge to the theoretical distribution function and density.
+Slide the sample size up and down, notice how the empirical
+distribution function and histogram coverge to the theoretical
+distribution function and density.
 
-```{r DistConv, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+
 nmax <- 1000
 rdist <- list(Normal=rnorm, Exponential = rexp, 
               Gamma = function(n) rgamma(n,3),
@@ -74,6 +112,7 @@ ddist <- list(Normal=dnorm, Exponential = dexp,
               Gamma = function(x) dgamma(x,3),
               "T" = function(x) dt(x,3))
 
+ui1 <- fluidPage(
 inputPanel(
   selectInput("dist",label="Distribution Type",
               choices=c("Normal","Exponential","Gamma","T"),
@@ -81,9 +120,12 @@ inputPanel(
    sliderInput("NN", label = "Maximum Sample Size:",
               min = 25, max=nmax, value=100, step=5)
 
-)
+),
+mainPanel(
+  plotOutput("dists")))
 
-renderPlot({
+server <- function (input,output) {
+  output$dists <- renderPlot({
   XX <- do.call(rdist[[input$dist]],list(nmax))
   Fn <-ecdf(XX[1:input$NN])
   layout(matrix(c(1,2),1,2))
@@ -96,6 +138,8 @@ renderPlot({
   curve(do.call(ddist[[input$dist]],list(x)),add=TRUE,lty=2,col="red")
   
 })
+}
+shinyApp(ui=ui,server=server)
 ```
 
 See also the [animated version](LawOfLargeNumbersAnimated.Rmd).

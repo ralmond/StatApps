@@ -84,14 +84,16 @@ server1 <- function (input,output) {
   output$quantplot <- renderPlot({
   pp <- as.numeric(input$pp)
   df1 <- as.numeric(input$df1)
-  qq <- switch(input$tails1,
+  tails1 <- input$tails1
+  if (is.null(tails1)) tails1 <- "upper"
+  qq <- switch(tails1,
               upper=qchisq(1-pp,df1),
               lower=qchisq(pp,df1))
  xl1 <- round(qchisq(.999,df1),1)
   curve(dchisq(x,df1),main=paste("Probability of shaded region = ",round(pp,3)),
         sub=paste("X2(",df1,") = ",round(qq,3)),
         xlim = c(0,xl1),yaxt="n",cex=3,cex.lab=2,cex.main=2,ylab="",xlab="Chi-squared")
-   switch(input$tails,
+   switch(tails,
          upper={
            cord.xu1 <- c(qq,seq(qq,xl1,0.01),xl1)
            cord.yu1 <- c(0,dchisq(seq(qq,xl1,0.01),df1),0)

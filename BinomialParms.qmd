@@ -6,9 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(shiny)
-library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 The [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution) can be thought of as a number of draws, $n$, from
@@ -28,6 +26,7 @@ the sample.  That is $p$, with a standard deviation of $\sqrt{p(1-p)/n}$.
 #| standalone: true
 #| viewerHeight: 500
 library(shiny)
+library(ggplot2)
 ui <- fluidPage(
 inputPanel(
   sliderInput("n", label = "Number of draws:",

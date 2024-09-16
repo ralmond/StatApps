@@ -1,20 +1,20 @@
 ---
 title: "Scatterplot examples"
 output: html_notebook
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(shiny)
-library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
 ```
-
-
 This demonstration will use some random data.  Lets start by generating the random data.  So give a [random seed][seed] and pick a sample size for your sample. 
 
-```{r seed, echo=FALSE}
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
 library(shiny)
+library(tidyverse)
+ui <- fluidPage(
 inputPanel(
   selectInput("N", label = "Sample Size:",
               choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
@@ -23,15 +23,27 @@ inputPanel(
               min = 0, max = .Machine$integer.max, 
               value = floor(runif(1)*.Machine$integer.max), 
               step = 157)
-)
+),
+mainPanel(
+  plotOutput("scatterplots"),
+  tableOutput("answers"))
 
-renderPlot({
-  N <<- as.numeric(input$N)
-  set.seed(input$seed)
-  X <- rnorm(N)
-  Err <- rnorm(N)
-  rho <- runif(9,-1,1)
-  names(rho) <- c("A","B","C","D","E","F","G","H","I")
+server <- function (input,output) {
+
+  data <- reactive({
+	N <- as.numeric(input$N)
+	set.seed(input$seed)
+	rho <- runif(9,-1,1)
+    names(rho) <- c("A","B","C","D","E","F","G","H","I")
+	list(X=rnorm(N),Err=rnorm(N),rho=rho)
+  })
+
+
+  output$scatterplots <- renderPlot({
+  N <- as.numeric(input$N)
+  X <- data()$X
+  Err <- data()$Y
+  rho <- data()$rho
   Y <- matrix(NA,N,9)
   colnames(Y) <- names(rho)
   ## Linear 
@@ -70,6 +82,8 @@ renderPlot({
     facet_wrap(vars(Y_var))
 }, height=800,width=800)
 
-renderTable(cors,rownames=TRUE)
+output$answers <- renderTable(cors,rownames=TRUE)
+}
+shinyApp(ui=ui,server=server)
 ```
 

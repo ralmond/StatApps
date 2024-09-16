@@ -1,37 +1,12 @@
 ---
 title: "Scatterplot examples"
 output: html_notebook
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(shiny)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
-This demonstration will use some random data.  Lets start by generating the random data.  So give a [random seed][seed] and pick a sample size for your sample. 
-
-```{r seed, echo=FALSE}
-library(shiny)
-inputPanel(
-  selectInput("N", label = "Sample Size:",
-              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
-  
-  numericInput("seed", label = "Random number Seed (integer)",
-              min = 0, max = .Machine$integer.max, 
-              value = floor(runif(1)*.Machine$integer.max), 
-              step = 157)
-)
-
-renderText({
-  N <<- as.numeric(input$N)
-  set.seed(input$seed)
-  X <<- rnorm(N)
-  Err <<- rnorm(N)
-  paste("Sample Size =",N,"Random Seed = ",input$seed,"\n")
-})
-```
 
 # Linear Relationships
 
@@ -43,19 +18,34 @@ All three of these example are indications that linear regression is a reasonabl
 This happens when we have a moderately high to strong correlation.
 
 
-```{r highCorrelation, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+Nmax <- 1000
+X <- rnorm(Nmax)
+Err <- rnorm(Nmax)
+ui <- fluidPage(
 inputPanel(
+  selectInput("N", label = "Sample Size:",
+              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
   sliderInput("rho", label = "Correlation Coefficient:",
               min = .75, max = 1, value = .85, step = 0.05),
   checkboxInput("sign","Negative Correlation",FALSE)
-)
+),
+mainPanel(
+  plotOutput("plots")))
 
-renderPlot({
-  rho <<- input$rho*ifelse(input$sign,-1,1)
-  Y <<-  rho*X + sqrt(1-rho*rho)*Err
-  plot(X,Y,main=paste("Correlation =",rho))
+server <- function (input,output) {
+  output$plots <- renderPlot({
+  N <- input$N
+  rho <- input$rho*ifelse(input$sign,-1,1)
+  Y <-  rho*X[1:N] + sqrt(1-rho*rho)*Err[1:N]
+  plot(X[1:N],Y,main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
+}
+shinyApp(ui=ui,server=server)
 ```
 
 
@@ -64,46 +54,75 @@ renderPlot({
 
 As the correlation coefficient gets lower, the scatterplot looks more blobby, but you can still tell that there is a slope.  This is a weak to moderate correlation.
 
-```{r lowCorrelation, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui <- fluidPage(
 inputPanel(
   sliderInput("rho1", label = "Correlation Coefficient:",
               min = .25, max = .75, value = .5, step = 0.05),
   checkboxInput("sign1","Negative Correlation",FALSE)
-)
+),
+mainPanel(
+  plotOutput("plot")))
 
-renderPlot({
+server <- function (input,output) {
+  output$plot <- renderPlot({
   rho <<- input$rho1*ifelse(input$sign1,-1,1)
   Y <<-  rho*X + sqrt(1-rho*rho)*Err
   plot(X,Y,main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
+}
+shinyApp(ui=ui,server=server)
 ```
 
 ## No Relationship
 
-Not much is going on here.  One thing that confuses people is the idea that linear regression doesn't work here.  Actually, it gives a quite accurate picture:  it tells you that not much is going on, which is what is actually happening.  The prediction from the regression will be that $\bar Y$ is the best predicted value for $Y$.
+Not much is going on here.  One thing that confuses people is the idea
+that linear regression doesn't work here.  Actually, it gives a quite
+accurate picture: it tells you that not much is going on, which is
+what is actually happening.  The prediction from the regression will
+be that $\bar Y$ is the best predicted value for $Y$.
 
 
-```{r noCorrelation, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui <- fluidPage(
 inputPanel(
   sliderInput("rho0", label = "Correlation Coefficient:",
               min = -.25, max = .25, value = .0, step = 0.05),
   checkboxInput("sign0","Negative Correlation",FALSE)
-)
+),
+mainPanel(
+  plotOutput("plot")))
 
-renderPlot({
+server <- function (input,output) {
+  output$plot <- renderPlot({
   rho <<- input$rho0*ifelse(input$sign0,-1,1)
   Y <<-  rho*X + sqrt(1-rho*rho)*Err
   plot(X,Y,main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
+}
+shinyApp(ui=ui,server=server)
 ```
 
 
 
 # Signs that the linear model doesn't work.
 
-The challenge to using regression (and correlation) to summarize the relationship between $X$ and $Y$ is when the relationship is non-linear.  Here the correlation/regression will tell about the linear part of the relationship, but missing the non-linear part.  If the non-linear part is small, this might not be too bad.  But if it is big, then _linear_ regression could be misleading.  (There are various types of non-linear regression that are covered in more advanced classes). 
+The challenge to using regression (and correlation) to summarize the
+relationship between $X$ and $Y$ is when the relationship is
+non-linear.  Here the correlation/regression will tell about the
+linear part of the relationship, but missing the non-linear part.  If
+the non-linear part is small, this might not be too bad.  But if it is
+big, then _linear_ regression could be misleading.  (There are various
+types of non-linear regression that are covered in more advanced
+classes).
 
 
 ## Curve
@@ -115,7 +134,11 @@ $$ Y = b_2 X^2 + b_1 X + b_0 + \epsilon$$
 This is a multiple (or quadradic) regression.  You can adjust the coefficients in the plot below.
 
 
-```{r curve, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui <- fluidPage(
 inputPanel(
   sliderInput("b2", label = "Quadradic Term Slope:",
               min = -1, max = 1, value = .5, step = 0.05),
@@ -125,24 +148,37 @@ inputPanel(
               min = -1, max = 1, value = 0, step = 0.05),
    sliderInput("tau", label = "Error Standard Deviation:",
               min = 0, max = 1, value = .5, step = 0.05)
-)
+),
+mainPanel(
+  plotOutput("plot")))
 
-renderPlot({
+server <- function (input,output) {
+  output$plot <- renderPlot({
   Y <<-  input$b2*X*X + input$b1*X + input$b0 + input$tau*Err
   rho <<- cor(X,Y)
   plot(X,Y,main=paste("Correlation =",rho))
   abline(a=input$b0,b=rho,col="red")
   lines(lowess(X,Y),col="blue",lty=2)
 },width=288,height=288)
+}
+shinyApp(ui=ui,server=server)
 ```
 
-If we try to run a _linear_ regression when the relationship is curved, it will only tell us part of the story.  The story it will tell is the red line, and not the blue curve.
+If we try to run a _linear_ regression when the relationship is
+curved, it will only tell us part of the story.  The story it will
+tell is the red line, and not the blue curve.
 
 ## Broken Lines
 
-Sometimes the reltionship changes somewhere through the range of the data.  Often this is a ceiling effect:  the effect of $X$ on $Y$ hits a ceiling.  For example, in the first couple of years of teaching, the ability of new teachers rises very rapidly as they gain experience.  But after 3--5 years, the effect levels out and the teachers grow much more slowly.
+Sometimes the reltionship changes somewhere through the range of the
+data.  Often this is a ceiling effect: the effect of $X$ on $Y$ hits a
+ceiling.  For example, in the first couple of years of teaching, the
+ability of new teachers rises very rapidly as they gain experience.
+But after 3--5 years, the effect levels out and the teachers grow much
+more slowly.
 
-Ideally we would fit two linear regression to these data splitting at a certain value of $X$, $x_0$.  So,
+Ideally we would fit two linear regression to these data splitting at
+a certain value of $X$, $x_0$.  So,
 
 $$ Y = \begin{cases}
  b_{11} X + b_{01} + \epsilon & \text {when} X \leq x_0 \\
@@ -151,7 +187,11 @@ $$ Y = \begin{cases}
  $$
  
 
-```{r ceiling, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+ui <- fluidPage(
 inputPanel(
   sliderInput("b11", label = "First Slope:",
               min = -1, max = 1, value = .5, step = 0.05),
@@ -161,9 +201,12 @@ inputPanel(
               min = -1, max = 1, value = 0, step = 0.05),
    sliderInput("tau1", label = "Error Standard Deviation:",
               min = 0, max = 1, value = .5, step = 0.05)
-)
+),
+mainPanel(
+  plotOutput("plot")))
 
-renderPlot({
+server <- function (input,output) {
+  output$plot <- renderPlot({
   b11 <<- input$b11
   b12 <<- input$b12
   x0 <<- input$x0
@@ -175,7 +218,10 @@ renderPlot({
   abline(b=b11,a=0,col="blue",lty=2)
   abline(b=b12,a=b02,col="blue",lty=2)
 },width=288,height=288)
-
+}
+shinyApp(ui=ui,server=server)
 ```
 
-Check out [this page](https://pluto.coe.fsu.edu/rdemos/CorrelationQuiz) to practice identifying these.
+Check out [this
+page](https://pluto.coe.fsu.edu/rdemos/CorrelationQuiz) to practice
+identifying these.

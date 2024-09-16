@@ -3,13 +3,10 @@ title: "Poisson Params"
 author: "Russell Almond"
 date: "September 1, 2020"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(shiny)
-library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 The Poisson distribution is a distribution for counts of events.  
@@ -27,25 +24,36 @@ The the number of events, $X$, follows a _Poisson distribution_.
 $$P(X=x) = \frac{(\lambda T)^x}{x!}e^{-\lambda T}$$
 The distribution looks like:
 
-```{r density, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
 library(shiny)
+library(ggplot2)
+ui <- fluidPage(
 inputPanel(
   sliderInput("mean", label = "Expected number of events per unit time",
               min=0, max=100, value=3.5, step=1),
   
   sliderInput("t", label = "Time Interval:",
               min = 0, max = 365, value = 1, step = 1)
-)
+),
+mainPanel(
+  plotOutput("poissoncurve")))
 
-renderPlot({
+server <- function (input,output) {
+  output$poissoncurve <- renderPlot({
   mu <- as.numeric(input$mean) * as.numeric(input$t)
   n <- mu + 3* sqrt(mu)
   dat <- data.frame(x=0:n,y=dpois(0:n,mu))
   ggplot(dat,aes(x,y)) +geom_col()  
 
 })
+}
+shinyApp(ui=ui,server=server)
 ```
 
 The mean and variance of the Poisson distribution are $\lambda T$ and $\lambda T$.  
 
-As the variance grows pretty quickly, statisticians will often take the square root of count data (especially if there is heteroscedasticity) to stabilize the variance.
+As the variance grows pretty quickly, statisticians will often take
+the square root of count data (especially if there is
+heteroscedasticity) to stabilize the variance.
