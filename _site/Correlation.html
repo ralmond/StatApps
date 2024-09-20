@@ -450,7 +450,7 @@ mainPanel(
 
 server1 &lt;- function (input,output) {
   output$plot1 &lt;- renderPlot({
-  N &lt;- as.numeric(input$N)
+  N &lt;- as.numeric(input$N1)
   X &lt;- rnorm(N)
   Err &lt;- rnorm(N)
   rxy &lt;- input$rxy

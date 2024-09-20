@@ -102,13 +102,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/selectize-0.15.2/css/selectize.bootstrap3.css" rel="stylesheet">
-<script src="site_libs/selectize-0.15.2/js/selectize.min.js"></script>
-<script src="site_libs/selectize-0.15.2/accessibility/js/selectize-plugin-a11y.min.js"></script>
-<script src="site_libs/ionrangeslider-javascript-2.3.1/js/ion.rangeSlider.min.js"></script>
-<script src="site_libs/strftime-0.9.2/strftime-min.js"></script>
-<link href="site_libs/ionrangeslider-css-2.3.1/css/ion.rangeSlider.css" rel="stylesheet">
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -372,14 +365,7 @@ window.Quarto = {
 </figure>
 </div>
 </div></div>
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#inputs-and-outputs" id="toc-inputs-and-outputs" class="nav-link active" data-scroll-target="#inputs-and-outputs">Inputs and Outputs</a></li>
-  <li><a href="#embedded-application" id="toc-embedded-application" class="nav-link" data-scroll-target="#embedded-application">Embedded Application</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -415,17 +401,11 @@ window.Quarto = {
 </header>
 
 
-<p>This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately.</p>
-<p>To learn more, see <a href="http://rmarkdown.rstudio.com/authoring_shiny.html">Interactive Documents</a>.</p>
-<section id="inputs-and-outputs" class="level2">
-<h2 class="anchored" data-anchor-id="inputs-and-outputs">Inputs and Outputs</h2>
-<p>You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change. This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny <code>renderPlot</code> function. The <code>selectInput</code> and <code>sliderInput</code> functions create the input widgets used to drive the plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">15</span>,<span class="at">mean=</span><span class="dv">0</span>,<span class="at">sd=</span><span class="dv">2</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data,<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="fu">mean</span>(data),<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data),data,<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">15</span>,<span class="at">mean=</span><span class="dv">0</span>,<span class="at">sd=</span><span class="dv">2</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data,<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(data))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="fu">mean</span>(data),<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data),data,<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -435,7 +415,7 @@ window.Quarto = {
 </div>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.649387</code></pre>
+<pre><code>[1] 2.485307</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -489,50 +469,8 @@ window.Quarto = {
 <pre><code>[1] 4.611709</code></pre>
 </div>
 </div>
-<div class="cell">
-<div class="cell-output-display no-overflow-x">
-<div class="shiny-input-panel">
-<div class="shiny-flow-layout">
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="n_breaks-label" for="n_breaks">Number of bins:</label>
-<div>
-<select id="n_breaks" class="shiny-input-select"><option value="10">10</option>
-<option value="20" selected="">20</option>
-<option value="35">35</option>
-<option value="50">50</option></select>
-<script type="application/json" data-for="n_breaks" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
-</div>
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container">
-<label class="control-label" id="bw_adjust-label" for="bw_adjust">Bandwidth adjustment:</label>
-<input class="js-range-slider" id="bw_adjust" data-skin="shiny" data-min="0.2" data-max="2" data-from="1" data-step="0.2" data-grid="true" data-grid-num="9" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell-output-display">
-<div class="shiny-plot-output html-fill-item" id="outb77ec834aec7e363" style="width:100%;height:400px;"></div>
-</div>
-</div>
-</section>
-<section id="embedded-application" class="level2">
-<h2 class="anchored" data-anchor-id="embedded-application">Embedded Application</h2>
-<p>It’s also possible to embed an entire Shiny application within an R Markdown document using the <code>shinyAppDir</code> function. This example embeds a Shiny application located in another directory:</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><iframe data-deferred-src="app3e64b952b20f41ea71953bac15bf3310/?w=&amp;__subapp__=1" width="100%" height="550" class="shiny-frame shiny-frame-deferred"></iframe></p>
-</div>
-</div>
-<p>Note the use of the <code>height</code> parameter to determine how much vertical space the embedded application should occupy.</p>
-<p>You can also use the <code>shinyApp</code> function to define an application inline rather then in an external directory.</p>
-<p>In all of R code chunks above the <code>echo = FALSE</code> attribute is used. This is to prevent the R code within the chunk from rendering in the document alongside the Shiny components.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

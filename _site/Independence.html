@@ -396,10 +396,10 @@ window.Quarto = {
 <p>Dividing any of those numbers by <span class="math inline">\(N_{xx}\)</span> produces a corresponding proportion <span class="math inline">\(P_{xx}\)</span> (which can be interpreted as a probability or proportion.</p>
 <p>Suppose group membership and the answer to the question are statistically indepedent. In the diagram below, adjust <span class="math inline">\(P_{A+}\)</span> and <span class="math inline">\(P_{+y}\)</span> to make a two-by-two table:</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 300
 library(shiny)
-ui &lt;- fluidPage(
 N &lt;- 100
+ui &lt;- fluidPage(
 inputPanel(
   sliderInput("pa", label = "P(Member of Group A)",
               min = 0, max = 1, value = .5, step = 0.05),
@@ -443,7 +443,7 @@ N_{An}/N_{+n} = N_{A+}/N\)</span></p></li>
 <p>If Group <span class="math inline">\(A\)</span> is more likely to answer <code>yes</code>, then the ratio should be bigger than 1.</p>
 <p>If Group <span class="math inline">\(B\)</span> is more likely to answer <code>yes</code>, then the ratio should be less than one.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 300
 library(shiny)
 N &lt;- 100
 ui1 &lt;- fluidPage(
@@ -459,7 +459,7 @@ mainPanel(
   tableOutput("table1"),
   plotOutput("mosaic1")))
 
-server &lt;- function (input,output) {
+server1 &lt;- function (input,output) {
 
 tabd &lt;- reactive({
   pa &lt;-input$pad
@@ -481,7 +481,7 @@ tabd &lt;- reactive({
 output$table1 &lt;- renderTable(tabd(),rownames=TRUE, digits=1)
 output$mosaic1 &lt;- renderPlot(mosaicplot(tabd()),color=TRUE,main="Dependent data")
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui1,server=server1)</code></pre>
 
 
 </section>

@@ -3,11 +3,10 @@ title: "Standardized Variables"
 author: "Russell Almond"
 date: "1/29/2019"
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
@@ -17,19 +16,29 @@ A (interval or ratio) variable on a raw score can be standardized to have mean 0
 
 $$ z = \frac{x-\mu_X}{\sigma_X}; \qquad Z = \frac{X-\bar X}{s_X} $$
 
-```{r standardize, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 300
 library(shiny)
+
+ui <- fluidPage(
 inputPanel(
   numericInput("mn", label = "Mean of X:",value=0,width=130),
   
   numericInput("sd", label = "Standard Deviation of X:",value=1,
               min = 0, width=130),
   numericInput("X", label = "x:",value=0, width=130)
+),
+mainPanel(
+h3(textOutput("z")))
 )
 
-h3(renderText({
- paste("z = ",round((input$X-input$mn)/input$sd,3))
-}))
+server <- function (input,output) {
+  output$z <- renderText({
+   paste("z = ",round((input$X-input$mn)/input$sd,3))
+})
+}
+shinyApp(ui=ui,server=server)
 ```
 
 Often the next step is to look up the Z score on a [normal calculator](NormalCalculator.Rmd).
@@ -40,18 +49,28 @@ Solving the above equations for X allows the z-score to be translated back into 
 
 $$ y = \sigma_Y z + \mu_Y\, ; \qquad Y = s_Y Z + \bar{Y}\ .$$
 
-```{r raw scale, echo=FALSE}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 300
+library(shiny)
+
+ui1 <- fluidPage(
 inputPanel(
   numericInput("mny", label = "Mean of Y:",value=0,width=130),
   
   numericInput("sdy", label = "Standard Deviation of Y:",value=1,
               min = 0, width=130),
   numericInput("ZZ", label = "z:",value=0, width=130)
+),
+mainPanel(h3(textOutput("Y")))
 )
 
-h3(renderText({
+server1 <- function (input,output) {
+  output$Y <- renderText({
  paste("Y = ",round(input$ZZ*input$sdy+input$mny,3))
-}))
+})
+}
+shinyApp(ui=ui1,server=server1)
 ```
 
 Note that these formulae are well worth memorizing, as they will come up over and over again.

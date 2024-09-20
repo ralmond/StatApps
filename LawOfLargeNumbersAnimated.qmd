@@ -9,33 +9,22 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
 # Law of Large Numbers
 
-This is pretty close to the frequency definition of probability.
-Suppose the probability of some event is $p$.  Suppose further than we
-sample $N$ times from the process that generates this event.  Let
-$p_N$ be the proportion of times the event occurs in $N$ trials.  As
-$N$ gets bigger and bigger, $p_N$ gets closer and closer to $p$.
+This is pretty close to the frequency definition of probability. Suppose the probability of some event is $p$. Suppose further than we sample $N$ times from the process that generates this event. Let $p_N$ be the proportion of times the event occurs in $N$ trials. As $N$ gets bigger and bigger, $p_N$ gets closer and closer to $p$.
 
-![Detour](sign_turn_left.png)_(Skip this unless you are good with
-calculus.)_  This is one of those epsilon-delta theorems.  So let
-$\delta$ be a difference from $p$ and let $\epsilon$ be a small
-probability.  For any $\epsilon$ and $\delta$, there exists an $N$
-such that $P(|p_N-p|>\delta) < \epsilon$.
-
+![Detour](sign_turn_left.png)*(Skip this unless you are good with calculus.)* This is one of those epsilon-delta theorems. So let $\delta$ be a difference from $p$ and let $\epsilon$ be a small probability. For any $\epsilon$ and $\delta$, there exists an $N$ such that $P(|p_N-p|>\delta) < \epsilon$.
 
 ## A demonstration.
 
-In the picture below, pick a probability $p$ and a sample size $N$.
-The computer will generate samples up to $N$ and plot $p_N$.
+In the picture below, pick a probability $p$ and a sample size $N$. The computer will generate samples up to $N$ and plot $p_N$.
 
-The $\delta$-line is an error bound plus or minus $\delta$ units from
-the target $p$.  This is a target so you can judge how close you got.
-
+The $\delta$-line is an error bound plus or minus $\delta$ units from the target $p$. This is a target so you can judge how close you got.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 library(plotly)
 library(patchwork)
@@ -90,39 +79,23 @@ shinyApp(ui=ui,server=server)
 
 ## Convergence of Distributions (Boot strap distribution)
 
-We can use the _Law of Large Numbers_ to prove an important theorem.  As the sample size gets larger and larger, the sample looks more and more like the population it is drawn from.
+We can use the *Law of Large Numbers* to prove an important theorem. As the sample size gets larger and larger, the sample looks more and more like the population it is drawn from.
 
+![Proof](sign_turn_left.png) Technically, the *Law of Large Numbers* refers to the result above. But we can use it so show a very important basis of statistics. Suppose we have some kind of distribution, $F(x)$, that generates numbers, $X$. Recall that the definition of $F(x)=\Pr(X \leq x)$.
 
+![Proof](sign_turn_left.png) Draw a sample of size $N$ from this distribution. Now consider the sampled data points $X_1,\ldots,X_N$, and consider sampling a new value $Y$ from that distribution. Let $F_N(y) = \Pr(Y \leq y)$. This is sometimes called the *bootstrap distribution*.
 
-![Proof](sign_turn_left.png) Technically, the _Law of Large Numbers_
-refers to the result above.  But we can use it so show a very
-important basis of statistics.  Suppose we have some kind of
-distribution, $F(x)$, that generates numbers, $X$.  Recall that the
-definition of $F(x)=\Pr(X \leq x)$.
-
-![Proof](sign_turn_left.png) Draw a sample of size $N$ from this
-distribution.  Now consider the sampled data points $X_1,\ldots,X_N$,
-and consider sampling a new value $Y$ from that distribution.  Let
-$F_N(y) = \Pr(Y \leq y)$.  This is sometimes called the _bootstrap
-distribution_.
-
-![Proof](sign_turn_left.png) By the law of large numbers, for every
-$y$, as $N$ gets large $F_N(y) \rightarrow F(y)$.  So the sample
-distribution $F_N()$ converges to the $F()$.
+![Proof](sign_turn_left.png) By the law of large numbers, for every $y$, as $N$ gets large $F_N(y) \rightarrow F(y)$. So the sample distribution $F_N()$ converges to the $F()$.
 
 ## Demonstration of convergence of distributions.
 
-Pick a distribution:
-* Normal -- standard normal
-* Exponential -- highly skewed
-* Gamma (shape = 3) -- skewed
-* T (df =3) -- high kurtosis
+Pick a distribution: \* Normal -- standard normal \* Exponential -- highly skewed \* Gamma (shape = 3) -- skewed \* T (df =3) -- high kurtosis
 
 Slide the sample size up and down, notice how the empirical distribution function and histogram coverge to the theoretical distribution function and density.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 library(plotly)
 library(patchwork)
@@ -183,8 +156,7 @@ output$histplot <- renderPlotly({
  ggplotly(histplot) %>% animation_opts(frame=100)
 })
 }
-shinyApp(ui=ui,server=server)
+shinyApp(ui=ui1,server=server1)
 ```
 
 See also the [non-animated version](LawOfLargeNumbers.Rmd).
-

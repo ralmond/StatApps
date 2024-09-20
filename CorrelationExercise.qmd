@@ -11,7 +11,7 @@ This demonstration will use some random data. Lets start by generating the rando
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 1000
 library(shiny)
 library(tidyverse)
 ui <- fluidPage(
@@ -27,41 +27,42 @@ inputPanel(
 mainPanel(
   plotOutput("scatterplots"),
   tableOutput("answers"))
+)
 
 server <- function (input,output) {
 
   data <- reactive({
-	N <- as.numeric(input$N)
-	set.seed(input$seed)
-	X<-rnorm(N)
-	Err<-rnorm(N)
-	rho <- runif(9,-1,1)
+	  N <- as.numeric(input$N)
+  	set.seed(input$seed)
+  	X<-rnorm(N)
+  	Err<-rnorm(N)
+  	rho <- runif(9,-1,1)
     names(rho) <- c("A","B","C","D","E","F","G","H","I")
-  Y <- matrix(NA,N,9)
-  colnames(Y) <- names(rho)
-  ## Linear 
-  for (j in 1:9)
-      Y[,j] <- rho[j]*X+sqrt(1-rho[j]*rho[j])*Err
-  ## Select some for curves
-  curves <- sample.int(9,rbinom(1,9,.3))
-  for (j in curves) {
+    Y <- matrix(NA,N,9)
+    colnames(Y) <- names(rho)
+    ## Linear 
+    for (j in 1:9)
+       Y[,j] <- rho[j]*X+sqrt(1-rho[j]*rho[j])*Err
+    ## Select some for curves
+    curves <- sample.int(9,rbinom(1,9,.3))
+    for (j in curves) {
     
-    if (runif(1) < .5) {
-      ## Quadradic
-      rho2 <- ifelse(runif(1)<.5,-1,1)*runif(1,.5,.85)
-      sigma <- sqrt(1-rho[j]*rho[j])
-      Y[,j] <- rho[j]*X+rho2*X*X+sigma*Err
-      rho[j] <- cor(X,Y[,j])
-    } else {
-      ## Split curve
-      sigma <- sqrt(1-rho[j]*rho[j])
-      x0 <- runif(1,-.5,.5)
-      b11 <- rho[j]
-      b12 <- rnorm(1,0,.2)
-      b02 <- (b11-b12)*x0 
-      Y[,j] <- ifelse(X<x0, b11*X, b12*X + b02) + sigma*Err
-      rho[j] <- cor(X,Y[,j])
-    }
+      if (runif(1) < .5) {
+        ## Quadradic
+        rho2 <- ifelse(runif(1)<.5,-1,1)*runif(1,.5,.85)
+        sigma <- sqrt(1-rho[j]*rho[j])
+        Y[,j] <- rho[j]*X+rho2*X*X+sigma*Err
+        rho[j] <- cor(X,Y[,j])
+      } else {
+        ## Split curve
+        sigma <- sqrt(1-rho[j]*rho[j])
+        x0 <- runif(1,-.5,.5)
+        b11 <- rho[j]
+        b12 <- rnorm(1,0,.2)
+        b02 <- (b11-b12)*x0 
+        Y[,j] <- ifelse(X<x0, b11*X, b12*X + b02) + sigma*Err
+        rho[j] <- cor(X,Y[,j])
+     }
   }
   list(X=X,Y=Y,rho=rho,curves=curves)
   })
@@ -84,7 +85,7 @@ server <- function (input,output) {
 }, height=800,width=800)
 
 output$answers <- renderTable(data.frame(correlation=round(data()$rho,3),
-                                         curved=(1:9%in%data()$curves),
+                                         curved=(1:9%in%data()$curves)),
                               row.names=names(data()$rho),
                               rownames=TRUE)
 }

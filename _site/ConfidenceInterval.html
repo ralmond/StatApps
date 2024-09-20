@@ -402,7 +402,7 @@ window.Quarto = {
 <p>Select the number of repetitions (how many times we through the net), the sample size (the size of the net) as well as the parameters of the population.</p>
 <p>You may need to press the regenerate button to get the graph to have the right symbols.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 1500
+#| viewerHeight: 1750
 library(shiny)
 
 rpointnotes &lt;- ""
@@ -439,7 +439,7 @@ mainPanel(
   sliderInput("alpha","Confidence",
                        min=0,max=1,value=.95,step=.01),
   plotOutput("plotI"))
-               
+)
 
 server &lt;- function (input,output) {
 
@@ -504,7 +504,7 @@ server &lt;- function (input,output) {
      paste(sum(pch == 5),
         "Estimates more than 2 SE from mean.")
    })
-   output$plot1 &lt;- renderPlot({
+   output$plotI &lt;- renderPlot({
       sem &lt;- dataSet$sem
       my &lt;- dataSet$my
       X &lt;- dataSet$Z * sem + my

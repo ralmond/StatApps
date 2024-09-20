@@ -331,7 +331,7 @@ ul.task-list li input[type="checkbox"] {
 
 <p>This demonstration will use some random data. Lets start by generating the random data. So give a [random seed][seed] and pick a sample size for your sample.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 1000
 library(shiny)
 library(tidyverse)
 ui &lt;- fluidPage(
@@ -347,41 +347,42 @@ inputPanel(
 mainPanel(
   plotOutput("scatterplots"),
   tableOutput("answers"))
+)
 
 server &lt;- function (input,output) {
 
   data &lt;- reactive({
-    N &lt;- as.numeric(input$N)
+      N &lt;- as.numeric(input$N)
     set.seed(input$seed)
     X&lt;-rnorm(N)
     Err&lt;-rnorm(N)
     rho &lt;- runif(9,-1,1)
     names(rho) &lt;- c("A","B","C","D","E","F","G","H","I")
-  Y &lt;- matrix(NA,N,9)
-  colnames(Y) &lt;- names(rho)
-  ## Linear 
-  for (j in 1:9)
-      Y[,j] &lt;- rho[j]*X+sqrt(1-rho[j]*rho[j])*Err
-  ## Select some for curves
-  curves &lt;- sample.int(9,rbinom(1,9,.3))
-  for (j in curves) {
+    Y &lt;- matrix(NA,N,9)
+    colnames(Y) &lt;- names(rho)
+    ## Linear 
+    for (j in 1:9)
+       Y[,j] &lt;- rho[j]*X+sqrt(1-rho[j]*rho[j])*Err
+    ## Select some for curves
+    curves &lt;- sample.int(9,rbinom(1,9,.3))
+    for (j in curves) {
     
-    if (runif(1) &lt; .5) {
-      ## Quadradic
-      rho2 &lt;- ifelse(runif(1)&lt;.5,-1,1)*runif(1,.5,.85)
-      sigma &lt;- sqrt(1-rho[j]*rho[j])
-      Y[,j] &lt;- rho[j]*X+rho2*X*X+sigma*Err
-      rho[j] &lt;- cor(X,Y[,j])
-    } else {
-      ## Split curve
-      sigma &lt;- sqrt(1-rho[j]*rho[j])
-      x0 &lt;- runif(1,-.5,.5)
-      b11 &lt;- rho[j]
-      b12 &lt;- rnorm(1,0,.2)
-      b02 &lt;- (b11-b12)*x0 
-      Y[,j] &lt;- ifelse(X&lt;x0, b11*X, b12*X + b02) + sigma*Err
-      rho[j] &lt;- cor(X,Y[,j])
-    }
+      if (runif(1) &lt; .5) {
+        ## Quadradic
+        rho2 &lt;- ifelse(runif(1)&lt;.5,-1,1)*runif(1,.5,.85)
+        sigma &lt;- sqrt(1-rho[j]*rho[j])
+        Y[,j] &lt;- rho[j]*X+rho2*X*X+sigma*Err
+        rho[j] &lt;- cor(X,Y[,j])
+      } else {
+        ## Split curve
+        sigma &lt;- sqrt(1-rho[j]*rho[j])
+        x0 &lt;- runif(1,-.5,.5)
+        b11 &lt;- rho[j]
+        b12 &lt;- rnorm(1,0,.2)
+        b02 &lt;- (b11-b12)*x0 
+        Y[,j] &lt;- ifelse(X&lt;x0, b11*X, b12*X + b02) + sigma*Err
+        rho[j] &lt;- cor(X,Y[,j])
+     }
   }
   list(X=X,Y=Y,rho=rho,curves=curves)
   })
@@ -404,7 +405,7 @@ server &lt;- function (input,output) {
 }, height=800,width=800)
 
 output$answers &lt;- renderTable(data.frame(correlation=round(data()$rho,3),
-                                         curved=(1:9%in%data()$curves),
+                                         curved=(1:9%in%data()$curves)),
                               row.names=names(data()$rho),
                               rownames=TRUE)
 }

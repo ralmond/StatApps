@@ -392,7 +392,7 @@ window.Quarto = {
 <p>In the picture below, pick a probability <span class="math inline">\(p\)</span> and a sample size <span class="math inline">\(N\)</span>. The computer will generate samples up to <span class="math inline">\(N\)</span> and plot <span class="math inline">\(p_N\)</span>.</p>
 <p>The <span class="math inline">\(\delta\)</span>-line is an error bound plus or minus <span class="math inline">\(\delta\)</span> units from the target <span class="math inline">\(p\)</span>. This is a target so you can judge how close you got.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 ui &lt;- fluidPage(
 inputPanel(
@@ -433,7 +433,7 @@ shinyApp(ui=ui,server=server)</code></pre>
 <p>Pick a distribution: * Normal – standard normal * Exponential – highly skewed * Gamma (shape = 3) – skewed * T (df =3) – high kurtosis</p>
 <p>Slide the sample size up and down, notice how the empirical distribution function and histogram coverge to the theoretical distribution function and density.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 
 nmax &lt;- 1000
@@ -459,7 +459,7 @@ inputPanel(
 mainPanel(
   plotOutput("dists")))
 
-server &lt;- function (input,output) {
+server1 &lt;- function (input,output) {
   output$dists &lt;- renderPlot({
   XX &lt;- do.call(rdist[[input$dist]],list(nmax))
   Fn &lt;-ecdf(XX[1:input$NN])
@@ -474,7 +474,7 @@ server &lt;- function (input,output) {
   
 })
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui1,server=server1)</code></pre>
 <p>See also the <a href="LawOfLargeNumbersAnimated.Rmd">animated version</a>.</p>
 
 

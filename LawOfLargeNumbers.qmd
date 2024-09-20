@@ -34,7 +34,7 @@ the target $p$. This is a target so you can judge how close you got.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 ui <- fluidPage(
 inputPanel(
@@ -98,7 +98,7 @@ distribution function and density.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(shiny)
 
 nmax <- 1000
@@ -124,7 +124,7 @@ inputPanel(
 mainPanel(
   plotOutput("dists")))
 
-server <- function (input,output) {
+server1 <- function (input,output) {
   output$dists <- renderPlot({
   XX <- do.call(rdist[[input$dist]],list(nmax))
   Fn <-ecdf(XX[1:input$NN])
@@ -139,7 +139,7 @@ server <- function (input,output) {
   
 })
 }
-shinyApp(ui=ui,server=server)
+shinyApp(ui=ui1,server=server1)
 ```
 
 See also the [animated version](LawOfLargeNumbersAnimated.Rmd).

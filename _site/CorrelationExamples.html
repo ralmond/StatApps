@@ -461,7 +461,7 @@ mainPanel(
 server2 &lt;- function (input,output) {
   output$plot2 &lt;- renderPlot({
   rho &lt;- input$rho0*ifelse(input$sign0,-1,1)
-  Y &lt;-  rho*X[1:input:N2] + sqrt(1-rho*rho)*Err[1:input:N2]
+  Y &lt;-  rho*X[1:input$N2] + sqrt(1-rho*rho)*Err[1:input$N2]
   plot(X[1:input$N2],Y,xlab="X",main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)

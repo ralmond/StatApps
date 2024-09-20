@@ -41,6 +41,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -378,74 +383,55 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="standardizing-a-raw-score.">Standardizing a raw score.</h2>
 <p>A (interval or ratio) variable on a raw score can be standardized to have mean 0 and standard deviation 1 by simply subtracting the mean and dividing by the standard deviation. This formula come in two flavors: one using the population mean and standard deviation (mu and sigma) and one using the sample statistics (x-bar and s). The subscripts are to remind you what variable you are using, as there is often both an X and Y wandering around.</p>
 <p><span class="math display">\[ z = \frac{x-\mu_X}{\sigma_X}; \qquad Z = \frac{X-\bar X}{s_X} \]</span></p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="shiny-input-panel">
-<div class="shiny-flow-layout">
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="mn-label" for="mn">Mean of X:</label>
-<input id="mn" type="number" class="shiny-input-number form-control" value="0">
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="sd-label" for="sd">Standard Deviation of X:</label>
-<input id="sd" type="number" class="shiny-input-number form-control" value="1" min="0">
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="X-label" for="X">x:</label>
-<input id="X" type="number" class="shiny-input-number form-control" value="0">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell-output-display">
-<h3 class="anchored">
-<div id="out8f7b6dfd98a0bacd" class="shiny-text-output"></div>
-</h3>
-</div>
-</div>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 300
+library(shiny)
+
+ui &lt;- fluidPage(
+inputPanel(
+  numericInput("mn", label = "Mean of X:",value=0,width=130),
+  
+  numericInput("sd", label = "Standard Deviation of X:",value=1,
+              min = 0, width=130),
+  numericInput("X", label = "x:",value=0, width=130)
+),
+mainPanel(
+h3(textOutput("z")))
+)
+
+server &lt;- function (input,output) {
+  output$z &lt;- renderText({
+   paste("z = ",round((input$X-input$mn)/input$sd,3))
+})
+}
+shinyApp(ui=ui,server=server)</code></pre>
 <p>Often the next step is to look up the Z score on a <a href="NormalCalculator.Rmd">normal calculator</a>.</p>
 </section>
 <section id="going-from-a-standard-z-score-to-a-raw-score." class="level2">
 <h2 class="anchored" data-anchor-id="going-from-a-standard-z-score-to-a-raw-score.">Going from a standard (z) score to a raw score.</h2>
 <p>Solving the above equations for X allows the z-score to be translated back into a raw score. Often, a new variable is needed, so lets change the variables from X to Y. Once again, there are two variants based on whether sample or population means and standard deviations are used:</p>
 <p><span class="math display">\[ y = \sigma_Y z + \mu_Y\, ; \qquad Y = s_Y Z + \bar{Y}\ .\]</span></p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="shiny-input-panel">
-<div class="shiny-flow-layout">
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="mny-label" for="mny">Mean of Y:</label>
-<input id="mny" type="number" class="shiny-input-number form-control" value="0">
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="sdy-label" for="sdy">Standard Deviation of Y:</label>
-<input id="sdy" type="number" class="shiny-input-number form-control" value="1" min="0">
-</div>
-</div>
-<div>
-<div class="form-group shiny-input-container" style="width:130px;">
-<label class="control-label" id="ZZ-label" for="ZZ">z:</label>
-<input id="ZZ" type="number" class="shiny-input-number form-control" value="0">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell-output-display">
-<h3 class="anchored">
-<div id="out5235cd2b46123f54" class="shiny-text-output"></div>
-</h3>
-</div>
-</div>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 300
+library(shiny)
+
+ui1 &lt;- fluidPage(
+inputPanel(
+  numericInput("mny", label = "Mean of Y:",value=0,width=130),
+  
+  numericInput("sdy", label = "Standard Deviation of Y:",value=1,
+              min = 0, width=130),
+  numericInput("ZZ", label = "z:",value=0, width=130)
+),
+mainPanel(h3(textOutput("Y")))
+)
+
+server1 &lt;- function (input,output) {
+  output$Y &lt;- renderText({
+ paste("Y = ",round(input$ZZ*input$sdy+input$mny,3))
+})
+}
+shinyApp(ui=ui1,server=server1)</code></pre>
 <p>Note that these formulae are well worth memorizing, as they will come up over and over again.</p>
 
 

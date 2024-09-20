@@ -88,7 +88,7 @@ mainPanel(
 
 server1 <- function (input,output) {
   output$plot1 <- renderPlot({
-  N <- as.numeric(input$N)
+  N <- as.numeric(input$N1)
   X <- rnorm(N)
   Err <- rnorm(N)
   rxy <- input$rxy
