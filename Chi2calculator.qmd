@@ -93,7 +93,7 @@ server1 <- function (input,output) {
   curve(dchisq(x,df1),main=paste("Probability of shaded region = ",round(pp,3)),
         sub=paste("X2(",df1,") = ",round(qq,3)),
         xlim = c(0,xl1),yaxt="n",cex=3,cex.lab=2,cex.main=2,ylab="",xlab="Chi-squared")
-   switch(tails,
+   switch(tails1,
          upper={
            cord.xu1 <- c(qq,seq(qq,xl1,0.01),xl1)
            cord.yu1 <- c(0,dchisq(seq(qq,xl1,0.01),df1),0)

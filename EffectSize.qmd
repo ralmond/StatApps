@@ -37,7 +37,7 @@ is the standard deviation of the population of difference scores
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 200
 library(shiny)
 ui <- fluidPage(
 inputPanel(
@@ -80,7 +80,7 @@ take the number halfway between the two.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 200
 library(shiny)
 ui1 <- fluidPage(
 inputPanel(
@@ -95,14 +95,14 @@ inputPanel(
   )
                     
 ),
-,
 mainPanel(
   h3(textOutput("effect2"))))
 
 server1 <- function (input,output) {
   output$effect2 <- renderText({
   mdiff <- input$mn1-input$mn2
-  spooled <- sqrt(((input$N1-1)*input$sd1^2+(input$N2-1)*input$sd2^2)/
+  spooled <- sqrt(((input$N1-1)*input$sd1^2+
+                   (input$N2-1)*input$sd2^2)/
     (input$N1+input$N2-2))
  paste("Mean difference = ", round(mdiff,2), ", Pooled SD = ", round(spooled,3),
       ", Effect size = ",round(mdiff/spooled,2))

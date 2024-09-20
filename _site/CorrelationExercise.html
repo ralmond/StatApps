@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -353,17 +353,10 @@ server &lt;- function (input,output) {
   data &lt;- reactive({
     N &lt;- as.numeric(input$N)
     set.seed(input$seed)
+    X&lt;-rnorm(N)
+    Err&lt;-rnorm(N)
     rho &lt;- runif(9,-1,1)
     names(rho) &lt;- c("A","B","C","D","E","F","G","H","I")
-    list(X=rnorm(N),Err=rnorm(N),rho=rho)
-  })
-
-
-  output$scatterplots &lt;- renderPlot({
-  N &lt;- as.numeric(input$N)
-  X &lt;- data()$X
-  Err &lt;- data()$Y
-  rho &lt;- data()$rho
   Y &lt;- matrix(NA,N,9)
   colnames(Y) &lt;- names(rho)
   ## Linear 
@@ -390,11 +383,19 @@ server &lt;- function (input,output) {
       rho[j] &lt;- cor(X,Y[,j])
     }
   }
-  datasets &lt;&lt;- as_tibble(data.frame(X,Y))
-  datalong &lt;&lt;- pivot_longer(datasets,cols=colnames(Y),
+  list(X=X,Y=Y,rho=rho,curves=curves)
+  })
+
+
+  output$scatterplots &lt;- renderPlot({
+  N &lt;- as.numeric(input$N)
+  X &lt;- data()$X
+  Y &lt;- data()$Y
+  rho &lt;- data()$rho
+ 
+  datasets &lt;- as_tibble(data.frame(X,Y))
+  datalong &lt;- pivot_longer(datasets,cols=colnames(Y),
                             names_to="Y_var",values_to="Y")
-  cors &lt;&lt;- data.frame(correlation=round(rho,3),curved=(1:9%in%curves),
-                      row.names=names(rho))
   
  ggplot(datalong,aes(X,Y))+geom_point() +
     geom_smooth(method="lm",color="red",se=FALSE) + 
@@ -402,7 +403,10 @@ server &lt;- function (input,output) {
     facet_wrap(vars(Y_var))
 }, height=800,width=800)
 
-output$answers &lt;- renderTable(cors,rownames=TRUE)
+output$answers &lt;- renderTable(data.frame(correlation=round(data()$rho,3),
+                                         curved=(1:9%in%data()$curves),
+                              row.names=names(data()$rho),
+                              rownames=TRUE)
 }
 shinyApp(ui=ui,server=server)</code></pre>
 

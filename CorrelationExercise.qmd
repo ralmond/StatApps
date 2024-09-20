@@ -6,8 +6,8 @@ output: html_notebook
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-This demonstration will use some random data.  Lets start by generating the random data.  So give a [random seed][seed] and pick a sample size for your sample. 
 
+This demonstration will use some random data. Lets start by generating the random data. So give a \[random seed\]\[seed\] and pick a sample size for your sample.
 
 ```{shinylive-r}
 #| standalone: true
@@ -33,17 +33,10 @@ server <- function (input,output) {
   data <- reactive({
 	N <- as.numeric(input$N)
 	set.seed(input$seed)
+	X<-rnorm(N)
+	Err<-rnorm(N)
 	rho <- runif(9,-1,1)
     names(rho) <- c("A","B","C","D","E","F","G","H","I")
-	list(X=rnorm(N),Err=rnorm(N),rho=rho)
-  })
-
-
-  output$scatterplots <- renderPlot({
-  N <- as.numeric(input$N)
-  X <- data()$X
-  Err <- data()$Y
-  rho <- data()$rho
   Y <- matrix(NA,N,9)
   colnames(Y) <- names(rho)
   ## Linear 
@@ -70,11 +63,19 @@ server <- function (input,output) {
       rho[j] <- cor(X,Y[,j])
     }
   }
-  datasets <<- as_tibble(data.frame(X,Y))
-  datalong <<- pivot_longer(datasets,cols=colnames(Y),
+  list(X=X,Y=Y,rho=rho,curves=curves)
+  })
+
+
+  output$scatterplots <- renderPlot({
+  N <- as.numeric(input$N)
+  X <- data()$X
+  Y <- data()$Y
+  rho <- data()$rho
+ 
+  datasets <- as_tibble(data.frame(X,Y))
+  datalong <- pivot_longer(datasets,cols=colnames(Y),
                             names_to="Y_var",values_to="Y")
-  cors <<- data.frame(correlation=round(rho,3),curved=(1:9%in%curves),
-                      row.names=names(rho))
   
  ggplot(datalong,aes(X,Y))+geom_point() +
     geom_smooth(method="lm",color="red",se=FALSE) + 
@@ -82,8 +83,10 @@ server <- function (input,output) {
     facet_wrap(vars(Y_var))
 }, height=800,width=800)
 
-output$answers <- renderTable(cors,rownames=TRUE)
+output$answers <- renderTable(data.frame(correlation=round(data()$rho,3),
+                                         curved=(1:9%in%data()$curves),
+                              row.names=names(data()$rho),
+                              rownames=TRUE)
 }
 shinyApp(ui=ui,server=server)
 ```
-

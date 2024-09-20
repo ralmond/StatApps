@@ -9,18 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-A *parameter* is a value that can be changed in a statistical model.
-For example, the *mean* and *standard deviation* are the parameters of
-the normal distribution, which is a model for a population.  Changing
-the value of a parameter, changes the model. We can see that in the
-illustration below.  Try changing the values of the mean and standard
-deviation and see what happens to the shape of the curve.
+A *parameter* is a value that can be changed in a statistical model. For example, the *mean* and *standard deviation* are the parameters of the normal distribution, which is a model for a population. Changing the value of a parameter, changes the model. We can see that in the illustration below. Try changing the values of the mean and standard deviation and see what happens to the shape of the curve.
 
 ## Inputs and Outputs
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 600
 library(shiny)
 ui <- fluidPage(
 inputPanel(
@@ -47,6 +42,3 @@ server <- function (input,output) {
 }
 shinyApp(ui=ui,server=server)
 ```
-
-
-

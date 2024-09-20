@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -449,14 +449,16 @@ server1 &lt;- function (input,output) {
   output$quantplot &lt;- renderPlot({
   pp &lt;- as.numeric(input$pp)
   df1 &lt;- as.numeric(input$df1)
-  qq &lt;- switch(input$tails1,
+  tails1 &lt;- input$tails1
+  if (is.null(tails1)) tails1 &lt;- "upper"
+  qq &lt;- switch(tails1,
               upper=qchisq(1-pp,df1),
               lower=qchisq(pp,df1))
  xl1 &lt;- round(qchisq(.999,df1),1)
   curve(dchisq(x,df1),main=paste("Probability of shaded region = ",round(pp,3)),
         sub=paste("X2(",df1,") = ",round(qq,3)),
         xlim = c(0,xl1),yaxt="n",cex=3,cex.lab=2,cex.main=2,ylab="",xlab="Chi-squared")
-   switch(input$tails,
+   switch(tails1,
          upper={
            cord.xu1 &lt;- c(qq,seq(qq,xl1,0.01),xl1)
            cord.yu1 &lt;- c(0,dchisq(seq(qq,xl1,0.01),df1),0)

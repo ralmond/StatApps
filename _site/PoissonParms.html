@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -382,7 +382,7 @@ window.Quarto = {
 <p>The the number of events, <span class="math inline">\(X\)</span>, follows a <em>Poisson distribution</em>.</p>
 <p><span class="math display">\[P(X=x) = \frac{(\lambda T)^x}{x!}e^{-\lambda T}\]</span> The distribution looks like:</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 600
 library(shiny)
 library(ggplot2)
 ui &lt;- fluidPage(
@@ -403,7 +403,9 @@ server &lt;- function (input,output) {
   dat &lt;- data.frame(x=0:n,y=dpois(0:n,mu))
   ggplot(dat,aes(x,y)) +geom_col()  
 
-})</code></pre>
+})
+}
+shinyApp(ui=ui,server=server)</code></pre>
 <p>The mean and variance of the Poisson distribution are <span class="math inline">\(\lambda T\)</span> and <span class="math inline">\(\lambda T\)</span>.</p>
 <p>As the variance grows pretty quickly, statisticians will often take the square root of count data (especially if there is heteroscedasticity) to stabilize the variance.</p>
 

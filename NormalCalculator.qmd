@@ -14,7 +14,7 @@ In this tool, you input a z score, and get a corresponding normal probability.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 600
 library(shiny)
 ui <- fluidPage(
 inputPanel(
@@ -87,7 +87,7 @@ In this tool, you input a probability, and get a corresponding *z* score.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 600
 library(shiny)
 ui1 <- fluidPage(
  inputPanel(

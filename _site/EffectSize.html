@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -390,7 +390,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="simple-case-one-group">Simple Case – One Group</h2>
 <p>When we are looking at a single group, the definition of the effect size is fairly simple. The single variable usually is a difference score; e.g., <em>posttest - pretest</em>. The standard deviation of interest is the standard deviation of the population of difference scores (estimated by the sample).</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 200
 library(shiny)
 ui &lt;- fluidPage(
 inputPanel(
@@ -400,7 +400,7 @@ inputPanel(
               min = 0, width=130)
 ),
 mainPanel(
-  h3(textOutput("effect")))
+  h3(textOutput("effect"))))
 
 server &lt;- function (input,output) {
   output$effect &lt;-  renderText({
@@ -416,7 +416,7 @@ shinyApp(ui=ui,server=server)</code></pre>
 \frac{(N_1 -1)\sigma^2_1 +(N_2 -1)\sigma^2_2}{N_1+N_2-1} ,\]</span> take the square root of that to get the standard deviation.</p>
 <p>Although one could calculate that by hand, the calculator below will do the job for you, and then calculate the effect size at the same time. Note that the pooled SD should always be in between the SDs of group 1 and group 2. For a rough and ready estimate, you could just take the number halfway between the two.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 200
 library(shiny)
 ui1 &lt;- fluidPage(
 inputPanel(
@@ -431,14 +431,14 @@ inputPanel(
   )
                     
 ),
-,
 mainPanel(
-  h3(textOutput("effect2")))
+  h3(textOutput("effect2"))))
 
 server1 &lt;- function (input,output) {
   output$effect2 &lt;- renderText({
   mdiff &lt;- input$mn1-input$mn2
-  spooled &lt;- sqrt(((input$N1-1)*input$sd1^2+(input$N2-1)*input$sd2^2)/
+  spooled &lt;- sqrt(((input$N1-1)*input$sd1^2+
+                   (input$N2-1)*input$sd2^2)/
     (input$N1+input$N2-2))
  paste("Mean difference = ", round(mdiff,2), ", Pooled SD = ", round(spooled,3),
       ", Effect size = ",round(mdiff/spooled,2))
@@ -450,7 +450,7 @@ shinyApp(ui=ui1,server=server1)</code></pre>
 <h3 class="anchored" data-anchor-id="how-big-is-big-cohens-guide-to-effect-sizes.">How big is big? Cohen’s guide to effect sizes.</h3>
 <p>Really, the answer is entirely discipline specific. In Physics, it is quite common to be able to exert large forces and to measure very accurately, and hence be able to get very large effect sizes. In the social sciences and education, it often hard to control all of the variables that might affect the outcome, so the typical effect sizes are quite small.</p>
 <p>Jacob Cohen presented a guideline for use in power analyses. This was really just for when you had no idea of what the size of the effect would be. He suggested:</p>
-<table class="table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Effect</th>

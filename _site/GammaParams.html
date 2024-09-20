@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -377,7 +377,7 @@ window.Quarto = {
 <p>Suppose instead of waiting for one event, we wait for <span class="math inline">\(k\)</span> events. Then we get the <a href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a> with shape parameter <span class="math inline">\(k\)</span> and scale parameter <span class="math inline">\(\theta\)</span>. Its probability density function is: <span class="math display">\[ f(x|k,\theta) = \frac{1}{\Gamma(k)\theta^k}x^{k-1}e^{-x/\theta}\]</span></p>
 <p>The expected value is <span class="math inline">\(k\theta\)</span> and the standard deviation is <span class="math inline">\(k\theta^2\)</span>.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 600
 library(shiny)
 ui &lt;- fluidPage(
 inputPanel(

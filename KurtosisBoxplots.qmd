@@ -11,12 +11,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Kurtosis Determination Exercise.
 
-In this exercise, the computer will generate 3 datasets:  X, Y and Z.  These will be randomly assigned to high (leptokurtic), medium (mesokurtic) and low (platykurtic) distributions.
+In this exercise, the computer will generate 3 datasets: X, Y and Z. These will be randomly assigned to high (leptokurtic), medium (mesokurtic) and low (platykurtic) distributions.
 
 You can redraw from the same distributions by changing the sample size.
+
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(lattice)
 library(shiny)
 
@@ -110,39 +111,30 @@ output$answers <- renderTable({
 shinyApp(ui=ui,server=server)
 ```
 
-To try again with different distributions, reload the page.  If you are having trouble, try increasing the sample size:  sometimes a small sample won't display the characteristics of the distribution strongly.
+To try again with different distributions, reload the page. If you are having trouble, try increasing the sample size: sometimes a small sample won't display the characteristics of the distribution strongly.
 
 ## What to look for
 
-* In a normal distribution the whiskers extend about 1.5 box-lengths (IQR)s from the hinges (sides of the box).  
+-   In a normal distribution the whiskers extend about 1.5 box-lengths (IQR)s from the hinges (sides of the box).
 
-    - If the box is long compared to the whiskers, this is a sign the distribuiton is platykurtic.
-    + If the box is short compared to the whiskers, this is a sign the distribution is leptokurtic.
-    
-* The whiskers only extend to the farthest data point within 1.5 IQRs from the box.  So if there is high kurtosis, this will show up as lots of outliers.  
+    -   If the box is long compared to the whiskers, this is a sign the distribuiton is platykurtic.
+    -   If the box is short compared to the whiskers, this is a sign the distribution is leptokurtic.
 
-   + With a normal distribution, there is often 1--2 outliers per 100 data points.  Much more than that is a sign of high kurtosis.
-    
-  
-  
+-   The whiskers only extend to the farthest data point within 1.5 IQRs from the box. So if there is high kurtosis, this will show up as lots of outliers.
 
-* Is the length of the box (IQR) long compared to the length of the whiskers?
+    -   With a normal distribution, there is often 1--2 outliers per 100 data points. Much more than that is a sign of high kurtosis.
+
+-   Is the length of the box (IQR) long compared to the length of the whiskers?
 
 ## Related Pages:
 
 Here are the other exercises in this series:
 
-* Skewness Practice:
-   + [Histograms](SkewnessPractice.qmd)
-   + [Boxplots](SkewnessBoxplot.qmd)
-   + [Q-Q Plots](SkewnessQQ.qmd)
-
-* Kurtosis Practice:
-   + [Histograms](KurtosisPractice.qmd)
-   + [Boxplots](KurtosisBoxplots.qmd)
-   + [Q-Q Plots](KurtosisQQ.qmd)
-
-
-
-
-
+-   Skewness Practice:
+    -   [Histograms](SkewnessPractice.qmd)
+    -   [Boxplots](SkewnessBoxplot.qmd)
+    -   [Q-Q Plots](SkewnessQQ.qmd)
+-   Kurtosis Practice:
+    -   [Histograms](KurtosisPractice.qmd)
+    -   [Boxplots](KurtosisBoxplots.qmd)
+    -   [Q-Q Plots](KurtosisQQ.qmd)

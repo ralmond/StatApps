@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -487,12 +487,12 @@ Coefficients:
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) -17.7    6.7 
+(Intercept) -17.3    6.8 
 speed         3.9    0.4 
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 15.5    1.5  
+sigma 15.5    1.6  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -524,7 +524,7 @@ cars.fit &lt;- lm (dist~speed,data=cars)
 server &lt;- function (input,output) {
 
   cars.coef() &lt;- reactive({
-    url &lt;- "cars.coef.csv"
+    url &lt;- "https://myweb.fsu.edu/ralmond/IntroStats/cars.coef.csv"
     read.csv(url)
   })
   

@@ -20,7 +20,7 @@ You can redraw from the same distributions by changing the sample size.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 500
+#| viewerHeight: 750
 library(lattice)
 library(shiny)
 

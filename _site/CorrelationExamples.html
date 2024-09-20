@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -402,7 +402,7 @@ server &lt;- function (input,output) {
   N &lt;- input$N
   rho &lt;- input$rho*ifelse(input$sign,-1,1)
   Y &lt;-  rho*X[1:N] + sqrt(1-rho*rho)*Err[1:N]
-  plot(X[1:N],Y,main=paste("Correlation =",rho))
+  plot(X[1:N],Y,main=paste("Correlation =",rho),xlab="X")
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
 }
@@ -413,25 +413,30 @@ shinyApp(ui=ui,server=server)</code></pre>
 <p>As the correlation coefficient gets lower, the scatterplot looks more blobby, but you can still tell that there is a slope. This is a weak to moderate correlation.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 500
+Nmax &lt;- 1000
+X &lt;- rnorm(Nmax)
+Err &lt;- rnorm(Nmax)
 library(shiny)
-ui &lt;- fluidPage(
+ui1 &lt;- fluidPage(
 inputPanel(
+  selectInput("N1", label = "Sample Size:",
+              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
   sliderInput("rho1", label = "Correlation Coefficient:",
               min = .25, max = .75, value = .5, step = 0.05),
   checkboxInput("sign1","Negative Correlation",FALSE)
 ),
 mainPanel(
-  plotOutput("plot")))
+  plotOutput("plot1")))
 
-server &lt;- function (input,output) {
-  output$plot &lt;- renderPlot({
+server1 &lt;- function (input,output) {
+  output$plot1 &lt;- renderPlot({
   rho &lt;&lt;- input$rho1*ifelse(input$sign1,-1,1)
-  Y &lt;&lt;-  rho*X + sqrt(1-rho*rho)*Err
-  plot(X,Y,main=paste("Correlation =",rho))
+  Y &lt;&lt;-  rho*X[1:input$N1] + sqrt(1-rho*rho)*Err[1:input$N1]
+  plot(X[1:input$N1],Y,xlab="X",main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui1,server=server1)</code></pre>
 </section>
 <section id="no-relationship" class="level2">
 <h2 class="anchored" data-anchor-id="no-relationship">No Relationship</h2>
@@ -439,24 +444,29 @@ shinyApp(ui=ui,server=server)</code></pre>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 500
 library(shiny)
-ui &lt;- fluidPage(
+Nmax &lt;- 1000
+X &lt;- rnorm(Nmax)
+Err &lt;- rnorm(Nmax)
+ui2 &lt;- fluidPage(
 inputPanel(
+  selectInput("N2", label = "Sample Size:",
+              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
   sliderInput("rho0", label = "Correlation Coefficient:",
               min = -.25, max = .25, value = .0, step = 0.05),
   checkboxInput("sign0","Negative Correlation",FALSE)
 ),
 mainPanel(
-  plotOutput("plot")))
+  plotOutput("plot2")))
 
-server &lt;- function (input,output) {
-  output$plot &lt;- renderPlot({
-  rho &lt;&lt;- input$rho0*ifelse(input$sign0,-1,1)
-  Y &lt;&lt;-  rho*X + sqrt(1-rho*rho)*Err
-  plot(X,Y,main=paste("Correlation =",rho))
+server2 &lt;- function (input,output) {
+  output$plot2 &lt;- renderPlot({
+  rho &lt;- input$rho0*ifelse(input$sign0,-1,1)
+  Y &lt;-  rho*X[1:input:N2] + sqrt(1-rho*rho)*Err[1:input:N2]
+  plot(X[1:input$N2],Y,xlab="X",main=paste("Correlation =",rho))
   abline(a=0,b=rho,col="red")
 },width=288,height=288)
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui2,server=server2)</code></pre>
 </section>
 </section>
 <section id="signs-that-the-linear-model-doesnt-work." class="level1">
@@ -469,8 +479,13 @@ shinyApp(ui=ui,server=server)</code></pre>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 500
 library(shiny)
-ui &lt;- fluidPage(
+Nmax &lt;- 1000
+X &lt;- rnorm(Nmax)
+Err &lt;- rnorm(Nmax)
+ui3 &lt;- fluidPage(
 inputPanel(
+  selectInput("N3", label = "Sample Size:",
+              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
   sliderInput("b2", label = "Quadradic Term Slope:",
               min = -1, max = 1, value = .5, step = 0.05),
    sliderInput("b1", label = "Linear Term Slope:",
@@ -481,18 +496,18 @@ inputPanel(
               min = 0, max = 1, value = .5, step = 0.05)
 ),
 mainPanel(
-  plotOutput("plot")))
+  plotOutput("plot3")))
 
-server &lt;- function (input,output) {
-  output$plot &lt;- renderPlot({
-  Y &lt;&lt;-  input$b2*X*X + input$b1*X + input$b0 + input$tau*Err
-  rho &lt;&lt;- cor(X,Y)
-  plot(X,Y,main=paste("Correlation =",rho))
+server3 &lt;- function (input,output) {
+  output$plot3 &lt;- renderPlot({
+  Y &lt;-  input$b2*X*X + input$b1*X + input$b0 + input$tau*Err
+  rho &lt;- cor(X,Y)
+  plot(X[1:input$N3],Y[1:input$N3],xlab="X",main=paste("Correlation =",rho))
   abline(a=input$b0,b=rho,col="red")
   lines(lowess(X,Y),col="blue",lty=2)
 },width=288,height=288)
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui3,server=server3)</code></pre>
 <p>If we try to run a <em>linear</em> regression when the relationship is curved, it will only tell us part of the story. The story it will tell is the red line, and not the blue curve.</p>
 </section>
 <section id="broken-lines" class="level2">
@@ -507,8 +522,13 @@ b_{12} X + b_{02} + \epsilon &amp; \text {when} X \ge x_0
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 500
 library(shiny)
-ui &lt;- fluidPage(
+Nmax &lt;- 1000
+X &lt;- rnorm(Nmax)
+Err &lt;- rnorm(Nmax)
+ui4 &lt;- fluidPage(
 inputPanel(
+selectInput("N4", label = "Sample Size:",
+              choices = c(25, 50, 100, 250, 500, 1000), selected = 100),
   sliderInput("b11", label = "First Slope:",
               min = -1, max = 1, value = .5, step = 0.05),
    sliderInput("b12", label = "Second Slope:",
@@ -519,23 +539,23 @@ inputPanel(
               min = 0, max = 1, value = .5, step = 0.05)
 ),
 mainPanel(
-  plotOutput("plot")))
+  plotOutput("plot4")))
 
-server &lt;- function (input,output) {
-  output$plot &lt;- renderPlot({
+server4 &lt;- function (input,output) {
+  output$plot4 &lt;- renderPlot({
   b11 &lt;&lt;- input$b11
   b12 &lt;&lt;- input$b12
   x0 &lt;&lt;- input$x0
   b02 &lt;&lt;- (b11-b12)*x0 
   Y &lt;&lt;- ifelse(X&lt;x0, b11*X, b12*X + b02) + input$tau1*Err
   rho &lt;&lt;- cor(X,Y)
-  plot(X,Y,main=paste("Correlation =",rho))
+  plot(X[1:input$N4],Y[1:input$N4],xlab="X",main=paste("Correlation =",rho))
   abline(a=input$b0,b=rho,col="red")
   abline(b=b11,a=0,col="blue",lty=2)
   abline(b=b12,a=b02,col="blue",lty=2)
 },width=288,height=288)
 }
-shinyApp(ui=ui,server=server)</code></pre>
+shinyApp(ui=ui4,server=server4)</code></pre>
 <p>Check out <a href="https://pluto.coe.fsu.edu/rdemos/CorrelationQuiz">this page</a> to practice identifying these.</p>
 
 
