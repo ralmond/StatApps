@@ -55,7 +55,7 @@ $$\widehat y = \rho_{XY}\frac{\sigma_Y}{\sigma_X} x + \left ( \mu_Y - \rho_{XY}\
 
 ![detour](sign_turn_left.png) The notations $\widetilde{y}$ and $\widehat{y}$ indicate predicted values for $y$. The *y hat* ($\widehat y$) notation is reserved for what is called *maximum likelihood* predictions. In the case of a regression with normally distributed errors, the maximum likelihood predictor is also the least squares estimator. Usually, the estimators use the sample values, thus in the regression equation:
 
-$$ \widehat{b_1} = r_{XY}\frac{s_X}{s_Y}\;;\qquad \widehat{b_0}=\bar Y -r_{XY}\frac{s_X}{s_Y} \bar X\; .$$
+$$ \widehat{b_1} = r_{XY}\frac{s_Y}{s_X}\;;\qquad \widehat{b_0}=\bar Y -r_{XY}\frac{s_Y}{s_X} \bar X\; .$$
 
 ## Lets Try it.
 
